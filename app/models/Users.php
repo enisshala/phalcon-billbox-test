@@ -2,6 +2,8 @@
 
 use Phalcon\Validation;
 use Phalcon\Validation\Validator\Email as EmailValidator;
+use Phalcon\Validation\Validator\StringLength as StringLength;
+use Phalcon\Validation\Validator\PresenceOf as PresenceOf;
 use Phalcon\Mvc\Model\Query;
 use Phalcon\Di;
 
@@ -50,6 +52,25 @@ class Users extends \Phalcon\Mvc\Model
                 ]
             )
         );
+
+        $validator->add(
+            'password',
+            new PresenceOf(
+                [
+                    'message' => 'The password is required',
+                ]
+            )
+        );
+
+        $validator->add(
+            'username',
+            new StringLength([
+                    'max' => 10,
+                    'min' => 6,
+                    'messageMaximum' => 'Username should be less than 10 characters',
+                    'messageMinimum' => 'Username should be more than 6 characters'
+                ]
+            ));
 
         return $this->validate($validator);
     }
@@ -129,8 +150,9 @@ class Users extends \Phalcon\Mvc\Model
         return $user[0]->id;
     }
 
-    public function getUserId() {}
-
+    public function getUserId()
+    {
+    }
 
 
 }

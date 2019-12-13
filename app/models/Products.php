@@ -1,6 +1,9 @@
 <?php
 
+use Phalcon\Validation;
 use Phalcon\Mvc\Model\Query;
+use Phalcon\Validation\Validator\PresenceOf as PresenceOf;
+
 use Phalcon\Di;
 
 class Products extends \Phalcon\Mvc\Model
@@ -29,6 +32,27 @@ class Products extends \Phalcon\Mvc\Model
      * @var string
      */
     public $sale;
+
+    /**
+     * Validations and business logic
+     *
+     * @return boolean
+     */
+    public function validation()
+    {
+        $validator = new Validation();
+
+        $validator->add(
+            'product_name',
+            new PresenceOf(
+                [
+                    'message' => 'The product name is required',
+                ]
+            )
+        );
+
+        return $this->validate($validator);
+    }
 
     /**
      * Initialize method for model.
